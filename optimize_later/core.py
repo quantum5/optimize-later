@@ -8,6 +8,7 @@ from numbers import Number
 
 from optimize_later.config import global_callback
 from optimize_later.utils import NoArgDecoratorMeta, with_metaclass
+from optimize_later import utils
 
 log = logging.getLogger(__name__.rpartition('.')[0] or __name__)
 timer = [time.time, time.clock][os.name == 'nt']
@@ -16,7 +17,7 @@ timer = [time.time, time.clock][os.name == 'nt']
 def _generate_default_name():
     for entry in inspect.stack():
         file, line = entry[1:3]
-        if file != __file__:
+        if file not in (__file__, utils.__file__):
             break
     else:
         return '-'
