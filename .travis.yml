@@ -1,0 +1,20 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+env:
+  - DJANGO_VERSION=""
+  - DJANGO_VERSION=">=1.8,<1.9"
+  - DJANGO_VERSION=">=1.9,<1.10"
+  - DJANGO_VERSION=">=1.10,<1.11"
+  - DJANGO_VERSION=">=1.11,<2"
+install:
+  - pip install codecov $([ -n "$DJANGO_VERSION" ] && echo "Django$DJANGO_VERSION")
+script:
+  - if [ -n "$DJANGO_VERSION" ]; then
+      coverage run --source=optimize_later testproject/manage.py test;
+    else
+      coverage run --source=optimize_later -m unittest optimize_later.tests;
+    fi
+after_script:
+  - codecov
