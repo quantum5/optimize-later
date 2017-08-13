@@ -1,7 +1,7 @@
 import logging
 from functools import wraps
 
-from optimize_later.utils import NoArgDecoratorMeta
+from optimize_later.utils import NoArgDecoratorMeta, with_metaclass
 
 try:
     import threading
@@ -38,9 +38,7 @@ def global_callback(report):
             log.exception('Failed to invoke global callback: %r', callback)
 
 
-class optimize_context(object):
-    __metaclass__ = NoArgDecoratorMeta
-
+class optimize_context(with_metaclass(NoArgDecoratorMeta)):
     def __init__(self, callbacks=None):
         self.callbacks = callbacks
 

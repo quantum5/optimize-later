@@ -162,7 +162,7 @@ class OptimizeLaterTest(TestCase):
         self.assertEqual(len(reports), 1)
         self.assertReport(reports[0], blocks=2)
         report = reports[0].long()
-        print report
+        print(report)
         self.assertIn('      - Block ', report)
         self.assertIn('  - Block', report)
         self.assertEqual(report.count(', children:'), 2)
@@ -177,7 +177,7 @@ class OptimizeLaterTest(TestCase):
         self.assertEqual(function.__name__, 'function')
         self.assertEqual(function.__module__, __name__)
 
-        for i in xrange(10):
+        for i in range(10):
             function()
         self.assertEqual(len(reports), 10)
         for report in reports:

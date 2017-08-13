@@ -7,7 +7,7 @@ from functools import wraps
 from numbers import Number
 
 from optimize_later.config import global_callback
-from optimize_later.utils import NoArgDecoratorMeta
+from optimize_later.utils import NoArgDecoratorMeta, with_metaclass
 
 log = logging.getLogger(__name__.rpartition('.')[0] or __name__)
 timer = [time.time, time.clock][os.name == 'nt']
@@ -89,9 +89,7 @@ class OptimizeReport(object):
         return self.short()
 
 
-class optimize_later(object):
-    __metaclass__ = NoArgDecoratorMeta
-
+class optimize_later(with_metaclass(NoArgDecoratorMeta)):
     def __init__(self, name=None, limit=None, callback=None):
         if limit is None and isinstance(name, Number):
             name, limit = None, name
