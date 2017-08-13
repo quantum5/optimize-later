@@ -2,7 +2,59 @@ import time
 from unittest import TestCase
 
 from optimize_later import config
-from optimize_later.core import optimize_later, OptimizeReport, OptimizeBlock, optimize_context
+from optimize_later.core import optimize_later, OptimizeReport, OptimizeBlock
+from optimize_later.config import optimize_context
+
+
+class OptimizeContextTest(TestCase):
+    def test_optimize_context(self):
+        old_global, config._global_callbacks = config._global_callbacks, []
+
+        config.register_callback(1)
+        with optimize_context():
+            self.assertEqual(config.get_callbacks(), [1])
+            config.register_callback(2)
+            self.assertEqual(config.get_callbacks(), [1, 2])
+
+            with optimize_context([]):
+                self.assertEqual(config.get_callbacks(), [])
+                config.register_callback(3)
+                self.assertEqual(config.get_callbacks(), [3])
+
+            config.register_callback(4)
+            self.assertEqual(config.get_callbacks(), [1, 2, 4])
+
+            config.deregister_callback(2)
+            self.assertEqual(config.get_callbacks(), [1, 4])
+
+            config.deregister_callback(1)
+            self.assertEqual(config.get_callbacks(), [4])
+
+        self.assertEqual(config.get_callbacks(), [1])
+
+        config._global_callbacks = old_global
+
+    @optimize_context
+    def test_optimize_context_thread(self):
+        try:
+            import threading
+        except ImportError:
+            return
+
+        test = lambda report: None
+        seen = [None]
+        config.register_callback(test)
+
+        def thread_proc():
+            seen[0] = config.get_callbacks()
+
+        thread = threading.Thread(target=thread_proc)
+        thread.start()
+        thread.join()
+
+        self.assertIsInstance(seen[0], list)
+        self.assertNotIn(test, seen[0])
+        self.assertIn(test, config.get_callbacks())
 
 
 class OptimizeLaterTest(TestCase):
@@ -130,19 +182,3 @@ class OptimizeLaterTest(TestCase):
         self.assertEqual(len(reports), 10)
         for report in reports:
             self.assertReport(report)
-
-    def test_optimize_context(self):
-        config.register_callback(1)
-        with optimize_context():
-            self.assertEqual(config.callbacks, [1])
-            config.register_callback(2)
-            self.assertEqual(config.callbacks, [1, 2])
-
-            with optimize_context([]):
-                self.assertEqual(config.callbacks, [])
-                config.register_callback(3)
-                self.assertEqual(config.callbacks, [3])
-
-            config.register_callback(4)
-            self.assertEqual(config.callbacks, [1, 2, 4])
-        self.assertEqual(config.callbacks, [1])

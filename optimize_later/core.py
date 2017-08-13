@@ -5,20 +5,12 @@ import time
 from copy import copy
 from functools import wraps
 from numbers import Number
-from types import FunctionType
 
-from optimize_later import config
+from optimize_later.config import global_callback
+from optimize_later.utils import NoArgDecoratorMeta
 
 log = logging.getLogger(__name__.rpartition('.')[0] or __name__)
 timer = [time.time, time.clock][os.name == 'nt']
-
-
-def global_callback(report):
-    for callback in config.callbacks:
-        try:
-            callback(report)
-        except Exception:
-            log.exception('Failed to invoke global callback: %r', callback)
 
 
 def _generate_default_name():
@@ -97,13 +89,6 @@ class OptimizeReport(object):
         return self.short()
 
 
-class NoArgDecoratorMeta(type):
-    def __call__(cls, *args, **kwargs):
-        if len(args) == 1 and isinstance(args[0], FunctionType):
-            return cls()(args[0])
-        return super(NoArgDecoratorMeta, cls).__call__(*args, **kwargs)
-
-
 class optimize_later(object):
     __metaclass__ = NoArgDecoratorMeta
 
@@ -158,27 +143,3 @@ class optimize_later(object):
             with copy(self):
                 return function(*args, **kwargs)
         return wrapped
-
-
-class optimize_context(object):
-    __metaclass__ = NoArgDecoratorMeta
-
-    def __init__(self, callbacks=None):
-        self.callbacks = callbacks
-
-    def __enter__(self):
-        self.old_context = config.callbacks[:]
-        if self.callbacks is None:
-            config.callbacks[:] = self.old_context
-        else:
-            config.callbacks[:] = self.callbacks
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        config.callbacks[:] = self.old_context
-
-    def __call__(self, function):
-        @wraps(function)
-        def wrapper(*args, **kwargs):
-            with optimize_context(self.callbacks):
-                return function(*args, **kwargs)
-        return wrapper
