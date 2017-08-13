@@ -134,7 +134,8 @@ class optimize_later(with_metaclass(NoArgDecoratorMeta)):
             global_callback(report)
 
     def __call__(self, function):
-        self.name = '%s:%s' % (function.__module__, function.__name__)
+        if self._default_name:
+            self.name = '%s:%s' % (function.__module__, function.__name__)
 
         @wraps(function)
         def wrapped(*args, **kwargs):

@@ -182,3 +182,26 @@ class OptimizeLaterTest(TestCase):
         self.assertEqual(len(reports), 10)
         for report in reports:
             self.assertReport(report)
+
+    def test_decorator_with_args(self):
+        reports = []
+        config.register_callback(reports.append)
+
+        @optimize_later(float('inf'))
+        def function():
+            pass
+
+        self.assertEqual(len(reports), 0)
+
+    def test_decorator_custom_name(self):
+        reports = []
+        config.register_callback(reports.append)
+
+        @optimize_later('custom_name')
+        def function():
+            pass
+        function()
+
+        self.assertEqual(len(reports), 1)
+        self.assertReport(reports[0])
+        self.assertEqual(reports[0].name, 'custom_name')
