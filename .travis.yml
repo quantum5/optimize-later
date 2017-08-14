@@ -14,7 +14,7 @@ script:
   - if [ -n "$DJANGO_VERSION" ]; then
       coverage run --source=optimize_later testproject/manage.py test;
     else
-      coverage run --source=optimize_later -m unittest optimize_later.tests;
+      coverage run --source=optimize_later -m unittest discover optimize_later/;
     fi
 after_script:
   - codecov

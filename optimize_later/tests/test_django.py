@@ -5,10 +5,13 @@ import uuid
 from optimize_later.core import optimize_later, OptimizeReport
 
 try:
-    import django
+    from django.conf import settings
 except ImportError:
-    pass
+    use_django = False
 else:
+    use_django = settings.configured
+
+if use_django:
     from django.test import TestCase
     from optimize_later import apps
 
