@@ -66,6 +66,6 @@ class optimize_context(with_metaclass(NoArgDecoratorMeta)):
     def __call__(self, function):
         @wraps(function)
         def wrapper(*args, **kwargs):
-            with optimize_context(self.callbacks):
+            with optimize_context(self.callbacks, reset=self.reset):
                 return function(*args, **kwargs)
         return wrapper

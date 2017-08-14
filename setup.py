@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='optimize-later',
-    version='0.1',
+    version='0.1.1',
     description='Mark potentially slow blocks for notifications when it actually turns out too slow, '
                 'so you can optimize it.',
     author='Quantum',

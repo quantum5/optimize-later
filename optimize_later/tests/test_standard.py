@@ -27,6 +27,16 @@ class OptimizeContextTest(TestCase):
             with optimize_context([3]):
                 self.assertEqual(config.get_callbacks(), [1, 2, 3])
 
+            @optimize_context([3], reset=True)
+            def test():
+                self.assertEqual(config.get_callbacks(), [3])
+            test()
+
+            @optimize_context([3])
+            def test():
+                self.assertEqual(config.get_callbacks(), [1, 2, 3])
+            test()
+
             self.assertEqual(config.get_callbacks(), [1, 2])
 
             config.register_callback(4)
