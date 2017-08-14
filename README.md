@@ -10,7 +10,8 @@ Enter `optimize-later`.
 
 Instead of trying to guess what code ought to be optimized, `optimize-later` times potentially
 slow blocks of code for you, and calls a user-specified function when it exceeds the specified
-time limit. This way, you only have to optimize code when speed becomes a problem.
+time limit. This way, you only have to optimize code when speed becomes a problem, saving you
+from both the evils of premature optimization, and the evils of slow code. 
 
 ## Usage
 
@@ -124,7 +125,7 @@ Block 'tests.py@152' took 0.011565s (+0.011565s over limit), children:
 
 ## Installation
 
-First, install the module with:
+Install the module with:
 
 ```
 $ pip install optimize-later
