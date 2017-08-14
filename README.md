@@ -144,7 +144,7 @@ That's it!
 If you are using Django, you might want to configure `optimize-later` in `settings.py` instead of
 adding callbacks directly.
 
-You have to add `'optimize-later'` to `INSTALLED_APPS`.
+You have to add `'optimize_later'` to `INSTALLED_APPS`.
 
 Then, the list of callbacks as dot-separated import paths can be specified in `'OPTIMIZE_LATER_CALLBACKS'`
 in `settings.py`. For example:
