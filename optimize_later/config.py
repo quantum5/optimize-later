@@ -39,8 +39,9 @@ def global_callback(report):
 
 
 class optimize_context(with_metaclass(NoArgDecoratorMeta)):
-    def __init__(self, callbacks=None):
-        self.callbacks = callbacks
+    def __init__(self, callbacks=None, reset=False):
+        self.callbacks = callbacks or []
+        self.reset = reset
 
     def __enter__(self):
         try:
@@ -48,13 +49,13 @@ class optimize_context(with_metaclass(NoArgDecoratorMeta)):
         except AttributeError:
             self.old_context = None
 
-        if self.callbacks is None:
-            if self.old_context is None:
-                _local.callbacks = _global_callbacks[:]
-            else:
-                _local.callbacks = self.old_context[:]
+        if self.reset:
+            base_context = []
+        elif self.old_context is None:
+            base_context = _global_callbacks
         else:
-            _local.callbacks = self.callbacks[:]
+            base_context = self.old_context
+        _local.callbacks = base_context + self.callbacks
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.old_context is None:

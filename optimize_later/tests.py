@@ -16,10 +16,18 @@ class OptimizeContextTest(TestCase):
             config.register_callback(2)
             self.assertEqual(config.get_callbacks(), [1, 2])
 
-            with optimize_context([]):
+            with optimize_context(reset=True):
                 self.assertEqual(config.get_callbacks(), [])
                 config.register_callback(3)
                 self.assertEqual(config.get_callbacks(), [3])
+
+            with optimize_context([3], reset=True):
+                self.assertEqual(config.get_callbacks(), [3])
+
+            with optimize_context([3]):
+                self.assertEqual(config.get_callbacks(), [1, 2, 3])
+
+            self.assertEqual(config.get_callbacks(), [1, 2])
 
             config.register_callback(4)
             self.assertEqual(config.get_callbacks(), [1, 2, 4])

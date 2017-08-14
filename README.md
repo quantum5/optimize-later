@@ -92,13 +92,20 @@ def function():
     register_callback(my_report_function)
 
 # Remove global callbacks for this block.
-with optimize_context([]):
+with optimize_context(renew=True):
     pass
 # or...
-@optimize_context([])
+@optimize_context(renew=True)
 def function():
     pass
-# Of course, you can specify a list of callbacks to enable exclusively as well.
+    
+# Shortcut registration syntax.
+with optimize_context(my_report_function):
+    pass
+
+@optimize_context(my_report_function, renew=True)
+def function():
+    pass
 ```
 
 A sample short report:
