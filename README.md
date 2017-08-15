@@ -16,13 +16,30 @@ from both the evils of premature optimization, and the evils of slow code.
 ## Usage
 
 ```python
-from optimize_later import optimize_later
+from optimize_later import optimize_later, register_callback
 
-### Basic usage. These examples will call your global callback.
+### Basic usage.
 with optimize_later('test_block', 0.2):
     # potentially slow block of code...
     time.sleep(1)
 
+@register_callback
+def my_report_function(report):
+    # Short one line description.
+    print(report.short())
+
+    # Long description with breakdown based on blocks.
+    print(report.long())
+    
+    # Details available in:
+    #   - report.name: block name
+    #   - report.limit: time limit
+    #   - report.delta: time consumed
+    #   - report.blocks: breakdown by blocks
+    #   - report.start, report.end: start and end time with an unspecified timer:
+    #     useful for building a relative timeline with blocks.
+
+### More advanced uses.
 # Automatic block names from file and source line (slightly slow).
 with optimize_later(0.2):
     # potentially slow block of code...
@@ -61,24 +78,8 @@ with optimize_later() as o:
         with b.block():
             pass
 
-### Callbacks.
-from optimize_later import register_callback, deregister_callback, optimize_context
-
-@register_callback
-def my_report_function(report):
-    # Short one line description.
-    print(report.short())
-
-    # Long description with breakdown based on blocks.
-    print(report.long())
-    
-    # Details available in:
-    #   - report.name: block name
-    #   - report.limit: time limit
-    #   - report.delta: time consumed
-    #   - report.blocks: breakdown by blocks
-    #   - report.start, report.end: start and end time with an unspecified timer:
-    #     useful for building a relative timeline with blocks.
+### Callbacks deregistration and contexts.
+from optimize_later import deregister_callback, optimize_context
 
 deregister_callback(my_report_function)
 
