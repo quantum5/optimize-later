@@ -1,4 +1,4 @@
-# optimize-later [![Build Status](https://img.shields.io/travis/quantum5/optimize-later.svg)](https://travis-ci.org/quantum5/optimize-later) [![Coverage](https://img.shields.io/codecov/c/gh/quantum5/optimize-later.svg)](https://codecov.io/gh/quantum5/optimize-later)
+# optimize-later [![Build Status](https://img.shields.io/travis/quantum5/optimize-later.svg)](https://travis-ci.org/quantum5/optimize-later) [![Coverage](https://img.shields.io/codecov/c/gh/quantum5/optimize-later.svg)](https://codecov.io/gh/quantum5/optimize-later) [![PyPI](https://img.shields.io/pypi/v/optimize-later.svg)](https://pypi.org/project/optimize-later/) [![PyPI - Format](https://img.shields.io/pypi/format/optimize-later.svg)](https://pypi.org/project/optimize-later/)
 
 > Premature optimization is the root of all evil (or at least most of it) in programming.
 >
