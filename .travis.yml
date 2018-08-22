@@ -18,6 +18,8 @@ matrix:
       env: DJANGO_VERSION=">=2,<2.1"
     - python: "2.7"
       env: DJANGO_VERSION=">=2.1,<2.2"
+    - python: "3.4"
+      env: DJANGO_VERSION=">=2.1,<2.2"
 install:
   - pip install codecov $([ -n "$DJANGO_VERSION" ] && echo "Django$DJANGO_VERSION")
 script:
