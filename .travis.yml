@@ -1,25 +1,20 @@
 language: python
 python:
-  - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 env:
   - DJANGO_VERSION=""
-  - DJANGO_VERSION=">=1.8,<1.9"
-  - DJANGO_VERSION=">=1.9,<1.10"
-  - DJANGO_VERSION=">=1.10,<1.11"
   - DJANGO_VERSION=">=1.11,<2"
   - DJANGO_VERSION=">=2,<2.1"
   - DJANGO_VERSION=">=2.1,<2.2"
+  - DJANGO_VERSION=">=2.2,<3"
+  - DJANGO_VERSION=">=3,<3.1"
 matrix:
   exclude:
-    - python: "2.7"
-      env: DJANGO_VERSION=">=2,<2.1"
-    - python: "2.7"
-      env: DJANGO_VERSION=">=2.1,<2.2"
-    - python: "3.4"
-      env: DJANGO_VERSION=">=2.1,<2.2"
+    - python: "3.5"
+      env: DJANGO_VERSION=">=3,<3.1"
 install:
   - pip install codecov $([ -n "$DJANGO_VERSION" ] && echo "Django$DJANGO_VERSION")
 script:
