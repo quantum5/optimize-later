@@ -1,17 +1,16 @@
 import inspect
 import logging
 import os
-import time
 from copy import copy
 from functools import wraps
 from numbers import Number
+from time import perf_counter
 
 from optimize_later.config import global_callback
 from optimize_later.utils import NoArgDecoratorMeta, with_metaclass
 from optimize_later import utils
 
 log = logging.getLogger(__name__.rpartition('.')[0] or __name__)
-timer = [time.time, time.clock][os.name == 'nt']
 
 
 def _generate_default_name():
@@ -39,11 +38,11 @@ class OptimizeBlock(object):
 
     def __enter__(self):
         assert self.start is None, 'Do not reuse blocks.'
-        self.start = timer()
+        self.start = perf_counter()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.end = timer()
+        self.end = perf_counter()
         self.delta = self.end - self.start
 
     def short(self, precision=3):
@@ -115,11 +114,11 @@ class optimize_later(with_metaclass(NoArgDecoratorMeta)):
 
     def __enter__(self):
         assert self.start is None, 'Do not reuse optimize_later objects.'
-        self.start = timer()
+        self.start = perf_counter()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.end = timer()
+        self.end = perf_counter()
         self.delta = self.end - self.start
         if self.delta >= self.limit:
             self._report()
